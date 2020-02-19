@@ -7,6 +7,7 @@ class client:
     args = sys.argv
     rsPort = args[2]
     tsPort = args[3]
+    tsPort = 0
     try:
         cs=mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
         print("[C]: Client socket created")
