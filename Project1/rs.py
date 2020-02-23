@@ -6,7 +6,7 @@ import socket
 class rs:
     def rsListenPort(self):
         try:
-            ss = socket.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
+            ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             print("[S]: Server socket created")
         except socket.error as err:
             print('{} \n'.format("socket open error ", err))
