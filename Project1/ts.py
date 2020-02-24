@@ -26,3 +26,4 @@ class ts:
             'www.ibm.com': ['64.42.3.4', 'A'],
             'google.com': ['8.7.45.2', 'A'],
         }
+    tsListenPort(0)

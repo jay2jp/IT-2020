@@ -4,6 +4,7 @@ import random
 import socket
 
 class rs:
+
     def rsListenPort(self):
         try:
             ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -27,5 +28,6 @@ class rs:
             'localhost': ['', 'NS']
             }
 
+    rsListenPort(0)
 
 
