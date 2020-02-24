@@ -6,14 +6,12 @@ import sys
 
 class rs:
 
-
     def rsListenPort(port):
         try:
             ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             print("[S]: Server socket created")
         except socket.error as err:
             print('{} \n'.format("socket open error ", err))
-        print(port)
         server_binding = ('', port)
         ss.bind(server_binding)
         ss.listen(1)
@@ -37,15 +35,12 @@ class rs:
             else:
                 jenkins = dnsTable['localhost']
             message = word + " " + jenkins[0] + " " + jenkins[1]
-            csockid.send(message.encode('utf-8'));
+            csockid.send(message.encode('utf-8'))
 
         ss.close()
         exit()
 
-    def main(self):
+if __name__ == '__main__':
         script = sys.argv[0]
-        portnumber = sys.argv[1]
-        self.tsListenPort(portnumber);
-    main(0)
-
-
+        portnumber = int(sys.argv[1])
+        rs.rsListenPort(portnumber)
