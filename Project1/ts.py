@@ -34,20 +34,16 @@ class ts:
             if word in dnsTable.keys:
                 jenkins = dnsTable[word]
                 message = word + " " + jenkins[0] + " " + jenkins[1]
-                csockid.send(message.encode('utf-8'));
+                csockid.send(message.encode('utf-8'))
             else:
                 jenkins = dnsTable['localhost']
                 message = word + jenkins[0]
-                csockid.send(message.encode('utf-8'));
+                csockid.send(message.encode('utf-8'))
 
 
         ss.close()
         exit()
-    def main(self):
+if __name__ == '__main__':
         script = sys.argv[0]
-        portnumber = sys.argv[1]
-        self.rsListenPort(portnumber);
-
-    main(0)
-
-
+        portnumber = int(sys.argv[1])
+        ts.tsListenPort(portnumber)
