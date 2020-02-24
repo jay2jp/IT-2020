@@ -1,6 +1,7 @@
 import threading
 import time
 import random
+import sys
 import socket as mysoc
 
 class client:
