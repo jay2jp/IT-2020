@@ -20,7 +20,6 @@ class rs:
         localhost_ip = (socket.gethostbyname(host))
         print("[S]: Server IP address is  ", localhost_ip)
         csockid, addr = ss.accept()
-        word = csockid.recv(200).decode('utf-8')
         dnsTable = {
             'qtsdatacenter.aws.com': ['128.64.3.2','A'],
             'mx.rutgers.edu': ['192.64.4.2', 'A'],
@@ -29,13 +28,16 @@ class rs:
             'google.com': ['8.6.4.2', 'A'],
             'localhost': ['', 'NS']
             }
-        while word:
-            if word in dnsTable.keys:
-                jenkins = dnsTable[word]
+        while True:
+            word = csockid.recv(200).decode('utf-8')
+            if word in dnsTable.keys():
+                jenkins = dnsTable.get(word)
             else:
-                jenkins = dnsTable['localhost']
+                jenkins = dnsTable.get('localhost')
             message = word + " " + jenkins[0] + " " + jenkins[1]
+            print("this",jenkins[1],"\n")
             csockid.send(message.encode('utf-8'))
+            message = ""
 
         ss.close()
         exit()
