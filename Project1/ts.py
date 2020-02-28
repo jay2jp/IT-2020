@@ -5,13 +5,24 @@ import sys
 import socket
 
 class ts:
-    def tsListenPort(self):
+    def tsListenPort(port):
+        DNSfile = open('PROJI-DNSTS.txt', 'r')
         try:
             ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             print("[S]: Server socket created")
         except socket.error as err:
             print('{} \n'.format("socket open error ", err))
-        server_binding = ('', 50007)
+        dnsTable = {}
+        line = DNSfile.readline()
+        line.lower()
+        while line:
+            line = line.replace('\n','')
+            entry = line.split(' ');
+            dnsTable[entry[0]] = entry[1:]
+            line = DNSfile.readline()
+            line.lower()
+        print(dnsTable)
+        server_binding = ('', port)
         ss.bind(server_binding)
         ss.listen(1)
         host = socket.gethostname()
@@ -21,7 +32,8 @@ class ts:
         csockid, addr = ss.accept()
 
         word = csockid.recv(200).decode('utf-8')
-        dnsTable = {
+        word.lower()
+        dnsTableb = {
             'qtsdatacenter.aws.com': ['128.64.3.2', 'A'],
             'www.rutgers.edu': ['192.64.4.4', 'A'],
             'mx.rutgers.edu': ['192.64.4.5', 'A'],
@@ -30,8 +42,9 @@ class ts:
             'google.com': ['8.7.45.2', 'A'],
             'localhost' : ['-Error: HOST NOT FOUND', '']
         }
+
         while word:
-            if word in dnsTable.keys:
+            if word.lower() in dnsTable.keys:
                 jenkins = dnsTable[word]
                 message = word + " " + jenkins[0] + " " + jenkins[1]
                 csockid.send(message.encode('utf-8'))
@@ -39,7 +52,8 @@ class ts:
                 jenkins = dnsTable['localhost']
                 message = word + jenkins[0]
                 csockid.send(message.encode('utf-8'))
-
+            word = csockid.recv(200).decode('utf-8')
+            word.lower()
 
         ss.close()
         exit()

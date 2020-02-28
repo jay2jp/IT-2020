@@ -7,6 +7,17 @@ import sys
 class rs:
 
     def rsListenPort(port):
+        DNSfile = open('PROJI-DNSRS.txt', 'r')
+        dnsTable = {}
+        line = DNSfile.readline()
+        line.lower()
+        while line:
+            line = line.replace('\n','')
+            entry = line.split(' ');
+            dnsTable[entry[0]] = entry[1:]
+            line = DNSfile.readline()
+            line.lower()
+        print(dnsTable)
         try:
             ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             print("[S]: Server socket created")
@@ -20,7 +31,7 @@ class rs:
         localhost_ip = (socket.gethostbyname(host))
         print("[S]: Server IP address is  ", localhost_ip)
         csockid, addr = ss.accept()
-        dnsTable = {
+        dnsTableb = {
             'qtsdatacenter.aws.com': ['128.64.3.2','A'],
             'mx.rutgers.edu': ['192.64.4.2', 'A'],
             'kill.cs.rutgers.edu': ['182.48.3.2', 'A'],
@@ -28,8 +39,10 @@ class rs:
             'google.com': ['8.6.4.2', 'A'],
             'localhost': ['', 'NS']
             }
-        while True:
-            word = csockid.recv(200).decode('utf-8')
+        word = csockid.recv(200).decode('utf-8')
+        word.lower()
+        while word:
+
             if word in dnsTable.keys():
                 jenkins = dnsTable.get(word)
             else:
@@ -37,7 +50,8 @@ class rs:
             message = word + " " + jenkins[0] + " " + jenkins[1]
             print("this",jenkins[1],"\n")
             csockid.send(message.encode('utf-8'))
-            message = ""
+            word = csockid.recv(200).decode('utf-8')
+            word.lower()
 
         ss.close()
         exit()
@@ -46,3 +60,4 @@ if __name__ == '__main__':
         script = sys.argv[0]
         portnumber = int(sys.argv[1])
         rs.rsListenPort(portnumber)
+
