@@ -5,7 +5,8 @@ import sys
 import socket
 
 class ts:
-    def tsListenPort(self,port):
+    @staticmethod
+    def tsListenPort(port):
         DNSfile = open('PROJI-DNSTS.txt', 'r')
         try:
             ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -44,21 +45,24 @@ class ts:
         }
 
         while word:
-            if word.lower() in dnsTable.keys:
-                jenkins = dnsTable[word]
+            print("hello")
+            if word.lower() in dnsTable.keys():
+                jenkins = dnsTable.get(word)
                 message = word + " " + jenkins[0] + " " + jenkins[1]
                 csockid.send(message.encode('utf-8'))
             else:
-                jenkins = dnsTable['localhost']
+                jenkins = dnsTable.get('localhost')
                 message = word + jenkins[0]
                 csockid.send(message.encode('utf-8'))
+            print("about to take next word")
             word = csockid.recv(200).decode('utf-8')
+            print("got next word")
             word.lower()
 
-        ss.close()
-        exit()
+        print("made it out of loop")
+        #ss.close()
+        #exit()
 if __name__ == '__main__':
         script = sys.argv[0]
         portnumber = int(sys.argv[1])
-        foom = ts()
-        foom.tsListenPort(portnumber)
+        ts.tsListenPort(portnumber)

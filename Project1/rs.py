@@ -41,23 +41,20 @@ class rs:
         word = csockid.recv(200).decode('utf-8')
         word.lower()
         while word:
-
-            if word in dnsTable.keys():
+            if word.lower() in dnsTable.keys():
                 jenkins = dnsTable.get(word)
             else:
                 jenkins = dnsTable.get('localhost')
             message = word + " " + jenkins[0] + " " + jenkins[1]
-            print("this",jenkins[1],"\n")
             csockid.send(message.encode('utf-8'))
             word = csockid.recv(200).decode('utf-8')
             word.lower()
 
-        ss.close()
-        exit()
+        #ss.close()
+        #exit()
 
 if __name__ == '__main__':
         script = sys.argv[0]
         portnumber = int(sys.argv[1])
         foom = rs()
         foom.rsListenPort(portnumber);
-
