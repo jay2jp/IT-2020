@@ -5,8 +5,7 @@ import socket
 import sys
 
 class rs:
-
-    def rsListenPort(port):
+    def rsListenPort(self,port):
         DNSfile = open('PROJI-DNSRS.txt', 'r')
         dnsTable = {}
         line = DNSfile.readline()
@@ -23,7 +22,7 @@ class rs:
             print("[S]: Server socket created")
         except socket.error as err:
             print('{} \n'.format("socket open error ", err))
-        server_binding = ('', port)
+        server_binding = (socket.gethostname(), port)
         ss.bind(server_binding)
         ss.listen(1)
         host = socket.gethostname()
@@ -59,5 +58,6 @@ class rs:
 if __name__ == '__main__':
         script = sys.argv[0]
         portnumber = int(sys.argv[1])
-        rs.rsListenPort(portnumber)
+        foom = rs()
+        foom.rsListenPort(portnumber);
 

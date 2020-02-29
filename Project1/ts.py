@@ -5,7 +5,7 @@ import sys
 import socket
 
 class ts:
-    def tsListenPort(port):
+    def tsListenPort(self,port):
         DNSfile = open('PROJI-DNSTS.txt', 'r')
         try:
             ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -60,4 +60,5 @@ class ts:
 if __name__ == '__main__':
         script = sys.argv[0]
         portnumber = int(sys.argv[1])
-        ts.tsListenPort(portnumber)
+        foom = ts()
+        foom.tsListenPort(portnumber)
