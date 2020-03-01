@@ -41,17 +41,21 @@ class rs:
         word = csockid.recv(200).decode('utf-8')
         word.lower()
         while word:
+            if (word is "exit"):
+                break
+            print(word)
             if word.lower() in dnsTable.keys():
                 jenkins = dnsTable.get(word)
             else:
                 jenkins = dnsTable.get('localhost')
             message = word + " " + jenkins[0] + " " + jenkins[1]
+            print(message)
             csockid.send(message.encode('utf-8'))
             word = csockid.recv(200).decode('utf-8')
             word.lower()
 
-        #ss.close()
-        #exit()
+        ss.close()
+        exit()
 
 if __name__ == '__main__':
         script = sys.argv[0]

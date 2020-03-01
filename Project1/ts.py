@@ -45,14 +45,19 @@ class ts:
         }
 
         while word:
+            if(word is "exit"):
+                break
             print("hello")
+            print(word)
             if word.lower() in dnsTable.keys():
                 jenkins = dnsTable.get(word)
                 message = word + " " + jenkins[0] + " " + jenkins[1]
+                print(message)
                 csockid.send(message.encode('utf-8'))
             else:
                 jenkins = dnsTable.get('localhost')
                 message = word + jenkins[0]
+                print(message)
                 csockid.send(message.encode('utf-8'))
             print("about to take next word")
             word = csockid.recv(200).decode('utf-8')
@@ -60,8 +65,8 @@ class ts:
             word.lower()
 
         print("made it out of loop")
-        #ss.close()
-        #exit()
+        ss.close()
+        exit()
 if __name__ == '__main__':
         script = sys.argv[0]
         portnumber = int(sys.argv[1])
