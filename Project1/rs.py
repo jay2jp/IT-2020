@@ -39,20 +39,23 @@ class rs:
             'localhost': ['', 'NS']
             }
         word = csockid.recv(200).decode('utf-8')
-        word.lower()
         while word:
-            if (word is "exit"):
+            if word == "exit":
                 break
             print(word)
-            if word.lower() in dnsTable.keys():
-                jenkins = dnsTable.get(word)
-            else:
-                jenkins = dnsTable.get('localhost')
+            for key in dnsTable.keys():
+                if word.lower() == key.lower():
+                    if word == "MX.RUTGERS.EDU":
+                        print("yes")
+                    jenkins = dnsTable.get(key)
+                    print("this",jenkins)
+                    break
+                else:
+                    jenkins = dnsTable.get('localhost')
             message = word + " " + jenkins[0] + " " + jenkins[1]
             print(message)
             csockid.send(message.encode('utf-8'))
             word = csockid.recv(200).decode('utf-8')
-            word.lower()
 
         ss.close()
         exit()

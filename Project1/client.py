@@ -23,7 +23,7 @@ class client:
         #print("trying ts",line)
         cs2.send(line.encode('utf-8'))
         print("yes")
-        data=cs.recv(100).deocde('utf-8')
+        data=cs2.recv(100).decode('utf-8')
         print("i hope")
         client.writeToFile(data)
         print("I made it here")
@@ -33,7 +33,14 @@ class client:
 
     @staticmethod
     def writeToFile(line):
-        output = open("RESOLVED.txt","a")
+        #file = open("RESOLVED.txt","r")
+        #alreadyInFile = file.readlines()
+        if bool:
+            output = open("RESOLVED.txt","a")
+        else:
+            output = open("RESOLVED.txt","w")
+        #for x in alreadyInFile:
+        #    output.write(x)
         output.write(line+"\n")
         output.close()
 
@@ -44,7 +51,6 @@ if __name__ == '__main__':
     tsPort = int(args[3])
     try:
         cs=mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
-        cs2=mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
         print("[C]: Client socket created")
     except mysoc.error as err:
         print('{} \n'.format("socket open error ",err))
@@ -53,18 +59,26 @@ if __name__ == '__main__':
     rs_binding=(sa_sameas_myaddr,rsPort)
     cs.connect(rs_binding)
 
-    ts_binding=(sa_sameas_myaddr,tsPort)
-    cs2.connect(ts_binding)
+
+    bool = False
 
     input = open("PROJI-HNS.txt","r")
     lines = input.readlines()
-    while True:
-        for line in lines:
-            print("hi")
-            line = line.rstrip("\n")
-            if not client.rsListenPort(line):
-                client.tsListenPort(line)
+    for line in lines:
+        print("hi")
+        line = line.rstrip("\n")
+        if not client.rsListenPort(line):
+            try:
+                cs2=mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
+            except mysoc.error as err:
+                print('{} \n'.format("socket open error ",err))
+            ts_binding=(sa_sameas_myaddr,tsPort)
+            cs2.connect(ts_binding)
+            client.tsListenPort(line)
+            #cs2.send("exit".encode('utf-8'))
+            cs2.close()
+        bool = True
+
     input.close()
     cs.close()
-    cs2.close()
     exit()
