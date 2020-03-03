@@ -10,16 +10,13 @@ class ts:
         DNSfile = open('PROJI-DNSTS.txt', 'r')
         dnsTable = {}
         line = DNSfile.readline()
-        line.lower()
         while line:
             line = line.replace('\n','')
             entry = line.split(' ');
             dnsTable[entry[0]] = entry[1:]
             line = DNSfile.readline()
-            line.lower()
         print(dnsTable)
         while True:
-            print("START LOOP")
             try:
                 ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 print("[S]: Server socket created")
@@ -48,31 +45,20 @@ class ts:
 
             while word:
                 if word == "exit":
-                    print("got exit command")
                     break
-                print("hello")
-                print(word)
                 bool = False
                 for key in dnsTable.keys():
                     if word.lower() == key.lower():
                         jenkins = dnsTable.get(word.lower())
                         message = word + " " + jenkins[0] + " " + jenkins[1]
-                        print("here",message)
                         csockid.send(message.encode('utf-8'))
-                        print("sent message")
                         bool = True
                         break
                 if not bool:
                     message = word + " - Error:HOST NOT FOUND"
-                    print("there",message)
                     csockid.send(message.encode('utf-8'))
-                    print("message sent")
                 break
-                #print("about to take next word")
-                #word = csockid.recv(200).decode('utf-8')
-                #print("got next word")
 
-        print("made it out of loop")
         ss.close()
         exit()
 

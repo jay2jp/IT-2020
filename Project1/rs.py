@@ -9,13 +9,11 @@ class rs:
         DNSfile = open('PROJI-DNSRS.txt', 'r')
         dnsTable = {}
         line = DNSfile.readline()
-        line.lower()
         while line:
             line = line.replace('\n','')
             entry = line.split(' ');
             dnsTable[entry[0]] = entry[1:]
             line = DNSfile.readline()
-            line.lower()
         print(dnsTable)
         try:
             ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -40,20 +38,22 @@ class rs:
             }
         word = csockid.recv(200).decode('utf-8')
         while word:
+            bool = False
             if word == "exit":
                 break
-            print(word)
             for key in dnsTable.keys():
                 if word.lower() == key.lower():
-                    if word == "MX.RUTGERS.EDU":
-                        print("yes")
                     jenkins = dnsTable.get(key)
-                    print("this",jenkins)
+                    bool = True
                     break
                 else:
-                    jenkins = dnsTable.get('localhost')
-            message = word + " " + jenkins[0] + " " + jenkins[1]
-            print(message)
+                    jenkins = dnsTable.get(key)
+                    if jenkins[0] == "-":
+                        tsHostname = key;
+            if bool:
+                message = word + " " + jenkins[0] + " " + jenkins[1]
+            else:
+                message = tsHostname + " - NS";
             csockid.send(message.encode('utf-8'))
             word = csockid.recv(200).decode('utf-8')
 
